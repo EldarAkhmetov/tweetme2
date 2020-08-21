@@ -49,7 +49,15 @@ this is amazing!!!
                 const ojHtml = tweetsContainerElement.innerHTML;
                 tweetsContainerElement.innerHTML = newTweetElement + ojHtml;
                 myForm.reset();
+            } else if (xhr.status === 400) {
+                const errorJson = xhr.response;
+                console.log(errorJson);
+            } else if (xhr.status === 500) {
+                alert("There was a server error, please try again!!!11");
             };
+        };
+        xhr.onerror = function() {
+            alert("an error occured, please try again");
         };
         xhr.send(myFormData);
     };
@@ -78,6 +86,7 @@ this is amazing!!!
             }
             tweetsElement.innerHTML = finalTweetStr;
         };
+
         xhr.send();
 
     };
