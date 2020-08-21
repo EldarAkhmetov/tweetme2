@@ -17,7 +17,7 @@ this is amazing!!!
         <form class="form" method="POST" id="tweet-create-form" action="/create-tweet">
             {% csrf_token %}
             <input type="hidden" value="/" name="next" />
-            <textarea class="form-control" name="content" placeholder="Your tweet..."></textarea>      
+            <textarea required class="form-control" name="content" placeholder="Your tweet..."></textarea>      
             <button type="submit" class="btn btn-primary">Tweet</button>
         </form>
     </div>
@@ -46,6 +46,9 @@ this is amazing!!!
                 const newTweet = xhr.response;
                 const newTweetElement = formatTweetElement(newTweet);
                 console.log(newTweetElement);
+                const ojHtml = tweetsContainerElement.innerHTML;
+                tweetsContainerElement.innerHTML = newTweetElement + ojHtml;
+                myForm.reset();
             };
         };
         xhr.send(myFormData);
