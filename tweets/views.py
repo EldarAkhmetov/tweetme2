@@ -45,6 +45,17 @@ def tweet_detail_view(request, tweet_id, *args, **kwargs):
     serializer = TweetSerializer(obj)
     return Response(serializer.data, status=201)
 
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def tweet_delete_view(request, tweet_id, *args, **kwargs):
+    qs = Tweet.objects.filter(id=tweet_id)
+    if not qs.exists():
+        return Response({"message": "You cannot delete this tweet"}, status=401)
+    qs = qs.filter(user=request.user)
+    obj = qs.first()
+    obj.delete()
+    return Response({"message": "Tweet removed"}, status=200)
+
 def tweet_create_view_pure_django(request, *args, **kwargs):
     '''
     REST API Create View -> Django Rest Framework
