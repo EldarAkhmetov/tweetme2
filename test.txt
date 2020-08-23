@@ -1,0 +1,3 @@
+superuser:
+name: Eldar
+password: w8uEnK2WnG@drmP
