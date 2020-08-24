@@ -29,6 +29,22 @@ this is amazing!!!
 </div>
 
 <script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
     const handleTweetFormError = (msg, display) => {
         const myErrorDiv = document.getElementById("tweet-create-form-error");
         if (display === true) {
@@ -127,16 +143,47 @@ this is amazing!!!
     
     
 
-    const handleDidLike = (tweet_id, currentCount) => {
+    const handleTweetActionBtn = (tweet_id, currentCount, action) => {
+        const csrftoken = getCookie('csrftoken');
         console.log(tweet_id, currentCount);
+        const url = "/api/tweets/action";
+        const method = "POST";
+        const data = JSON.stringify({
+            "id": tweet_id,
+            "action": action
+        });
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest");
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        xhr.onload = function() {
+            // react.js will handle the state much better
+            console.log(xhr.status, xhr.response);
+            loadTweets(tweetsContainerElement)
+        };
+        xhr.send(data);
     };
 
     const LikeBtn = (tweet) => {
-        return "<button class='btn btn-primary btn-sm' onclick=handleDidLike(" + tweet.id + "," + tweet.likes + ")>" + tweet.likes + "Like</button>";
-    }
+        return "<button class='btn btn-primary btn-sm' onclick=handleTweetActionBtn(" + tweet.id + "," + tweet.likes + ",'like')>" + tweet.likes + "Like</button>";
+    };
+
+    const UnLikeBtn = (tweet) => {
+        return "<button class='btn btn-outline-primary btn-sm' onclick=handleTweetActionBtn(" + tweet.id + "," + tweet.likes + ",'unlike')>Unlike</button>";
+    };
+
+    const RetweetBtn = (tweet) => {
+        return "<button class='btn btn-outline-success btn-sm' onclick=handleTweetActionBtn(" + tweet.id + "," + tweet.likes + ",'retweet')>Retweet</button>";
+    };
 
     const formatTweetElement = (tweet) => {
-        const formattedTweet = "<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4'><h1>" + tweet.id + "</h1>" + "<p>" + tweet.content + "</p>" + "<div class='btn-group'>" + LikeBtn(tweet) + "</div></div>";
+        const formattedTweet = "<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4'><h1>" + tweet.id + "</h1>" + "<p>" + tweet.content + "</p>" + "<div class='btn-group'>" + 
+        LikeBtn(tweet) + 
+        UnLikeBtn(tweet) +
+        RetweetBtn(tweet) +
+        "</div></div>";
         return formattedTweet;
     }
 
