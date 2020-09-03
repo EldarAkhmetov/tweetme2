@@ -1,19 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {loadTweets} from '../lookup';
+import {createTweet, loadTweets} from '../lookup';
 
 export const TweetsComponent = (props) => {
   const textAreaRef = React.createRef();
   const [newTweets, setNewTweets] = useState([]);
+  
+  const handleBackendUpdate = (response, status) => {
+    // backend api response handler
+    let tempNewTweets = [...newTweets];
+    if (status === 201) {
+      tempNewTweets.unshift(response);
+      setNewTweets(tempNewTweets);
+    } else {
+      alert("An error orrured, please try again");
+    }
+  };  
+  
   const handleSubmit = (event) => {
+    // backend api request
     event.preventDefault();
     const newVal = textAreaRef.current.value;
-    let tempNewTweets = [...newTweets];
-    tempNewTweets.unshift({
-      content: newVal,
-      likes: 0,
-      id: 34254325324,
-    });
-    setNewTweets(tempNewTweets);
+    
+    createTweet(newVal, handleBackendUpdate);
+    
     textAreaRef.current.value = '';
   }
   
@@ -33,6 +42,7 @@ export const TweetsComponent = (props) => {
 export const TweetsList = (props) => {
   const [tweetsInit, setTweetsInit] = useState([]);
   const [tweets, setTweets] = useState([]);
+  const [tweetsDidSet, setTweetsDidSet] = useState(false);
   useEffect(() => {
     const final = [...props.newTweets].concat(tweetsInit);
     if (final.length !== tweets.length) {
@@ -40,18 +50,21 @@ export const TweetsList = (props) => {
     }
   }, [props.newTweets, tweets, tweetsInit]);    
   useEffect(() => {
-    //do my lookup
-    const myCallback = (response, status) => {
-      if (status === 200) {
-        setTweetsInit(response);
-      } else {
-        alert("There was an error")
-      }
-        
-    };
-    loadTweets(myCallback);
+    if (tweetsDidSet === false) {
+      const myCallback = (response, status) => {
+        if (status === 200) {
+          setTweetsInit(response);
+          setTweetsDidSet(true);
+        } else {
+          alert("There was an error")
+        }
+          
+      };
+      loadTweets(myCallback);
+    }
+    
       
-  }, [])
+  }, [tweetsInit, tweetsDidSet, setTweetsDidSet])
   
   return tweets.map((item, index) => {
     return <Tweet tweet={item} key={`${index}-${item.id}`} className="my-5 py-5 border border-danger bg-white text-dark w-50 mx-auto" />
