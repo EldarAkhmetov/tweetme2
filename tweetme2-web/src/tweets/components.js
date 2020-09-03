@@ -1,6 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {loadTweets} from '../lookup';
 
+export const TweetsComponent = (props) => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(event);
+  }
+  
+  return <div className={props.className}>
+    <div className='col-12 mb-3'>
+      <form onSubmit={handleSubmit}>
+        <textarea className='form-control w-25 mx-auto' name='tweet'>
+
+        </textarea>
+        <button type='submit' className='btn btn-primary my-3'>Tweet</button>
+      </form>
+    </div>
+    <TweetsList />
+  </div>
+}
+
 export const TweetsList = (props) => {
   const [tweets, setTweets] = useState([]);
     
