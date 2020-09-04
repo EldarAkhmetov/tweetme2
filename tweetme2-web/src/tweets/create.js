@@ -1,0 +1,38 @@
+import React from 'react';
+
+import {apiTweetCreate} from './lookup';
+
+export const TweetCreate = (props) => {
+  const textAreaRef = React.createRef();
+  const {didTweet} = props;
+  
+  const handleBackendUpdate = (response, status) => {
+    if (status === 201) {
+      didTweet(response);
+    } else {
+      alert("An error orrured, please try again");
+    }
+  };  
+  
+  const handleSubmit = (event) => {
+    // backend api request
+    event.preventDefault();
+    const newVal = textAreaRef.current.value;
+    
+    apiTweetCreate(newVal, handleBackendUpdate);
+    
+    textAreaRef.current.value = '';
+  }
+  
+  return <div className={props.className}>
+    <div className={props.className}>
+      <form onSubmit={handleSubmit}>
+        <textarea ref={textAreaRef} required className='form-control w-25 mx-auto' name='tweet'>
+
+        </textarea>
+        <button type='submit' className='btn btn-primary my-3'>Tweet</button>
+      </form>
+    </div>
+       
+  </div>
+};

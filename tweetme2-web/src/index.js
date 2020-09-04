@@ -15,11 +15,13 @@ if (appEl) {
   );
 }
 
+const e = React.createElement;
+
 const tweetsEl = document.getElementById('tweetme-2');
 if (tweetsEl) {
   ReactDOM.render(
     <React.StrictMode>
-      <TweetsComponent />
+      {e(TweetsComponent, tweetsEl.dataset)}
     </React.StrictMode>,
     tweetsEl
   );
