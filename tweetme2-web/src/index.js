@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {TweetsComponent} from './tweets';
+import {TweetsComponent, TweetDetailComponent} from './tweets';
 
 const appEl = document.getElementById('root');
 if (appEl) {
@@ -25,7 +25,17 @@ if (tweetsEl) {
     </React.StrictMode>,
     tweetsEl
   );
-}
+};
+
+const tweetDetailElements = document.querySelectorAll('.tweetme-2-detail');
+tweetDetailElements.forEach(container => {
+  ReactDOM.render(
+    <React.StrictMode>
+      {e(TweetDetailComponent, container.dataset)}
+    </React.StrictMode>,
+    container
+  );
+});
 
 
 
