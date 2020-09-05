@@ -48,8 +48,9 @@
       var path = window.location.pathname;
       var idRegex = /(?<tweetid>\d+)/;
       var match = path.match(idRegex);
-      var tweetId = match.groups.tweetid;
-      if (match.groups.tweetid) {
+      
+      if (match) {
+        var tweetId = match.groups.tweetid;
         var tweetme2El = document.getElementById("tweetme-2");
         tweetme2El.className = "d-none";
         var tweetEl = '<div class="tweetme-2-detail" data-tweet-id="' + tweetId + '" data-class-name="col-6 mx-auto"></div>';
