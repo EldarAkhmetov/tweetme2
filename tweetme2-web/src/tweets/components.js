@@ -16,7 +16,6 @@ export const TweetsComponent = (props) => {
     setNewTweets(tempNewTweets);
     
   };  
-  
  
   return <div className={props.className}>
     {canTweet === true && <TweetCreate didTweet={handleNewTweet} className='col-12 mb-3' />}
