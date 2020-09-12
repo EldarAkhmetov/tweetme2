@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import {Tweet} from './detail';
 
-import {apiTweetList, apiTweetAction} from './lookup';
+import {apiTweetList} from './lookup';
 
 export const TweetsList = (props) => {
     const [tweetsInit, setTweetsInit] = useState([]);
