@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import {ProfileBadgeComponent} from './profiles';
 import * as serviceWorker from './serviceWorker';
 import {FeedComponent, TweetsComponent, TweetDetailComponent} from './tweets';
 
@@ -42,6 +43,16 @@ tweetDetailElements.forEach(container => {
   ReactDOM.render(
     <React.StrictMode>
       {e(TweetDetailComponent, container.dataset)}
+    </React.StrictMode>,
+    container
+  );
+});
+
+const userProfileBadgeElements = document.querySelectorAll('.tweetme-2-profile-badge');
+userProfileBadgeElements.forEach(container => {
+  ReactDOM.render(
+    <React.StrictMode>
+      {e(ProfileBadgeComponent, container.dataset)}
     </React.StrictMode>,
     container
   );
